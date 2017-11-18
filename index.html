@@ -3,11 +3,54 @@
   <head>
          <title>Upload file</title>
   </head>
+  <style>
+    body {
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+    .figure1, .figure2 {
+      width: 100px;
+      height: 100px;
+    }
+    .image1, .image2 {
+      height: 80%;
+      background-size: cover;
+      background-position: center;
+    }
+    .image1 {
+      background-image: url('/test/image1');
+    }
+    .image2 {
+      background-image: url('/test/image2');
+    }
+  </style>
+
   <body>
-  <form enctype="multipart/form-data" action="http://localhost:7777/upload" method="post">
-      <input type="file" name="uploadfile" />
-      <input type="hidden" name="token" value="{{.}}"/>
-      <input type="submit" value="upload" />
-  </form>
+    <h1> How similar are these faces? </h1>
+    <form enctype="multipart/form-data" action="http://localhost:7777/upload" method="post">
+      <div>
+        <h2>Upload face 1</h2>
+        <input type="file" name="uploadfile1" />
+        <input type="hidden" name="token" value="{{.}}"/>
+        <input type="submit" value="upload" />
+        <figure class='figure1'>
+          <div class='image1'></div>
+          <figcaption>face 1</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h2>Upload face 2</h2>
+        <input type="file" name="uploadfile2" />
+        <input type="hidden" name="token" value="{{.}}"/>
+        <input type="submit" value="upload" />
+        <figure class='figure2'>
+          <div class='image2'></div>
+          <figcaption>face 2</figcaption>
+        </figure>
+      </div>
+    </form>
   </body>
-  </html>
+  <script type='text/javascript' src='index.js'></script>
+</html>
