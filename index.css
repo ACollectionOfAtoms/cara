@@ -1,0 +1,22 @@
+body {
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+header {
+  align-self: flex-start;
+}
+
+.figure1, .figure2 {
+  width: 100px;
+  height: 100px;
+}
+
+.image-one, .image-two {
+  display: block;
+  overflow: hidden;
+  height: 80%;
+  width: auto;
+}

@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-         <title>Upload file</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload file</title>
+    <link rel='stylesheet' href='index.css'/>
   </head>
-  <style>
-    body {
-      font-family: monospace;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-    }
-    .figure1, .figure2 {
-      width: 100px;
-      height: 100px;
-    }
-    .image1, .image2 {
-      height: 80%;
-      background-size: cover;
-      background-position: center;
-    }
-    .image1 {
-      background-image: url('/test/image1');
-    }
-    .image2 {
-      background-image: url('/test/image2');
-    }
-  </style>
-
   <body>
-    <h1> How similar are these faces? </h1>
+    <header>
+      <h1> how similar are these faces? </h1>
+    </header>
     <form enctype="multipart/form-data" action="http://localhost:7777/upload" method="post">
       <div>
-        <h2>Upload face 1</h2>
-        <input type="file" name="uploadfile1" />
+        <h2>upload face 1</h2>
+        <input type="file" class='file-input-one' name="uploadfile1" />
         <input type="hidden" name="token" value="{{.}}"/>
         <input type="submit" value="upload" />
         <figure class='figure1'>
-          <div class='image1'></div>
+          <img class='image-one'/>
           <figcaption>face 1</figcaption>
         </figure>
       </div>
       <div>
-        <h2>Upload face 2</h2>
-        <input type="file" name="uploadfile2" />
+        <h2>upload face 2</h2>
+        <input type="file" class='file-input-two' name="uploadfile2" />
         <input type="hidden" name="token" value="{{.}}"/>
         <input type="submit" value="upload" />
         <figure class='figure2'>
-          <div class='image2'></div>
+          <img class='image-two'/>
           <figcaption>face 2</figcaption>
         </figure>
       </div>
