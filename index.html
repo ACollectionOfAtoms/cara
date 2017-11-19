@@ -9,12 +9,10 @@
     <header>
       <h1> how similar are these faces? </h1>
     </header>
-    <form enctype="multipart/form-data" action="http://localhost:7777/upload" method="post">
+    <form id='upload-form'>
       <div>
         <h2>upload face 1</h2>
         <input type="file" class='file-input-one' name="uploadfile1" />
-        <input type="hidden" name="token" value="{{.}}"/>
-        <input type="submit" value="upload" />
         <figure class='figure1'>
           <img class='image-one'/>
           <figcaption>face 1</figcaption>
@@ -23,13 +21,12 @@
       <div>
         <h2>upload face 2</h2>
         <input type="file" class='file-input-two' name="uploadfile2" />
-        <input type="hidden" name="token" value="{{.}}"/>
-        <input type="submit" value="upload" />
         <figure class='figure2'>
           <img class='image-two'/>
           <figcaption>face 2</figcaption>
         </figure>
       </div>
+      <button type=submit>Upload</button>
     </form>
   </body>
   <script type='text/javascript' src='index.js'></script>
