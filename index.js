@@ -2,12 +2,10 @@ let inputOne = document.querySelector('.file-input-one');
 let inputTwo = document.querySelector('.file-input-two');
 let previewOne = document.querySelector('.image-one');
 let previewTwo = document.querySelector('.image-two');
-let files = Object.seal([null, null]);
 
-// input.style.opacity = 0;
 inputOne.addEventListener('change', updateImageDisplay.bind(null, inputOne, previewOne));
 inputTwo.addEventListener('change', updateImageDisplay.bind(null, inputTwo, previewTwo));
-uploadedFiles = {};
+const uploadedFiles = {};
 
 function updateImageDisplay(input, preview) {
   while(preview.firstChild) {
@@ -19,25 +17,23 @@ function updateImageDisplay(input, preview) {
     preview.textContent = 'No files currently selected for upload';
   } else {
     const file = curFiles[0];
-
-    uploadedFiles[fileName] = file;
-
     if(validFileType(file)) {
       const url = window.URL.createObjectURL(file);
       preview.src = url;
+      // store the file to be uploaded...
+      uploadedFiles[fileName] = file;
     } else {
       preview.textContent = 'File name ' + file.name + ': Not a valid file type. Update your selection.';
     }
   }
 }
 
-const fileTypes = [
-  'image/jpeg',
-  'image/pjpeg',
-  'image/png'
-]
-
 function validFileType(file) {
+  const fileTypes = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png'
+  ]
   return fileTypes.includes(file.type);
 }
 
@@ -54,10 +50,6 @@ function uploadFiles() {
   files.forEach((file, index)=> {
     formData.append(`file-${index}`, file);
   });
-  for (var par of formData.entries()) {
-    console.log(par[0] + ',' + par[1]);
-  }
-
   fetch(uri, {
     method: 'POST',
     'Content-Type': 'multipart/form-data',
