@@ -1,13 +1,29 @@
 body {
   font-family: monospace;
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  flex-flow: row nowrap;
+  margin: 0 20%;
+  font-size: 12px;
+}
+
+main {
+  flex: 1 0 70%;
+  border-top: 2px solid black;
+  border-left: 3px dotted black;
+  border-bottom: 2px solid black;
+  display: flex;
+  justify-content: center;
+  padding: 2em;
 }
 
 #upload-form {
   display: flex;
   flex-flow: column nowrap;
+}
+
+.upload-form__face-one,
+.upload-form__face-two {
+  border: 1px solid black;
 }
 
 .figure1, .figure2 {
@@ -20,4 +36,18 @@ body {
   overflow: hidden;
   height: 80%;
   width: auto;
+}
+
+.upload-button {
+  font-size: 2em;
+}
+
+aside {
+  flex: 1 0 30%;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 2em;
+  border-left: 3px dotted black;
+  border-right: 2px solid black;
+  border-bottom: 2px dotted black;
 }

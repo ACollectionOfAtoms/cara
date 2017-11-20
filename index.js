@@ -67,8 +67,8 @@ function uploadFiles() {
   })
 }
 
-const form = document.getElementById('upload-form');
-form.addEventListener('submit', e => {
+const submitButton = document.querySelector('.upload-button')
+submitButton.addEventListener('click', e => {
   e.preventDefault();
   uploadFiles();
 })

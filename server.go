@@ -28,7 +28,7 @@ func saveFile(fileName string, r *http.Request) {
 
 func upload(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		fmt.Println("GET used, implement error here!")
+		fmt.Println("POST was not used, implement error here!")
 	} else {
 		fmt.Println("Receiving Files...")
 	}
