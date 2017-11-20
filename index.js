@@ -52,6 +52,7 @@ function uploadFiles() {
   files.forEach((file, index)=> {
     formData.append(`file-${index}`, file);
   });
+  resultDiv.textContent = 'Comparing...'
   fetch(uri, {
     method: 'POST',
     'Content-Type': 'multipart/form-data',
@@ -59,8 +60,9 @@ function uploadFiles() {
   })
   .then(r => r.text())
   .then(data => {
-    const res = parseInt(data)
-    resultDiv.textContent = data;
+    let res = Math.round(data, 2)
+    res = `${res}% Similar!`
+    resultDiv.textContent = res;
   }).catch(e => {
     console.log('Error', e);
   })

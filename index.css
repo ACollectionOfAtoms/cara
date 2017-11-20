@@ -5,8 +5,9 @@ body {
   flex-direction: column;
 }
 
-header {
-  align-self: flex-start;
+#upload-form {
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .figure1, .figure2 {
