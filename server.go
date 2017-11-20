@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"log"
@@ -61,13 +60,6 @@ func processFaces(r *http.Request) (string, error) {
 		e = err
 	}
 	return string(out), e
-}
-
-func copyOutput(r io.Reader) {
-	scanner := bufio.NewScanner(r)
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-	}
 }
 
 func main() {

@@ -48,7 +48,6 @@ function uploadFiles() {
   const files = Object.values(uploadedFiles);
   const resultDiv = document.querySelector('#result');
 
-  console.log(files);
   files.forEach((file, index)=> {
     formData.append(`file-${index}`, file);
   });
