@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 )
 
 func saveFile(fileName string, r *http.Request) {
@@ -36,9 +38,46 @@ func upload(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Saving %v files...\n", len(files))
 	for fileName := range files {
+		// TODO: do this and facial processing in memory!
 		saveFile(fileName, r)
 	}
-	fmt.Print("files saved.")
+	fmt.Println("files saved.")
+	fmt.Println("Processing images...")
+	processFaces()
+	// fmt.Println(output)
+	// if e != nil {
+	// 	fmt.Println("error!")
+	// 	fmt.Println(e)
+	// } else {
+	// 	fmt.Println("image processing complete")
+	// 	fmt.Println(output)
+	// }
+}
+
+func processFaces() {
+	cmd := exec.Command("./compare.py", "test/*")
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		panic(err)
+	}
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		panic(err)
+	}
+	err = cmd.Start()
+	if err != nil {
+		panic(err)
+	}
+	go copyOutput(stdout)
+	go copyOutput(stderr)
+	cmd.Wait()
+}
+
+func copyOutput(r io.Reader) {
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 }
 
 func main() {
