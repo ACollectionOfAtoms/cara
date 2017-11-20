@@ -42,6 +42,7 @@ def getRep(imgPath):
 
 def main():
     result = 0
+    # TODO: Read files from streams not disc lmao
     img1 = 'test/file-0'
     img2 = 'test/file-1'
     d = getRep(img1) - getRep(img2)
@@ -49,10 +50,6 @@ def main():
     percent = ((4.0 - diff)/4.0) * 100
     result = percent
     return result
-    # TODO:!!!!!! set up byte stream? how to write to stdout faster?!
-    # print("Comparing {} with {}.".format(img1, img2))
-    # print(
-    #     "  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))
 
 if __name__ == "__main__":
     res = main()
