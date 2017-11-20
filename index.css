@@ -7,13 +7,13 @@ body {
 }
 
 main {
-  flex: 1 0 70%;
+  flex: 1 0 60%;
   border-top: 2px solid black;
   border-left: 3px dotted black;
   border-bottom: 2px solid black;
   display: flex;
   justify-content: center;
-  padding: 2em;
+  padding: 1em;
 }
 
 #upload-form {
@@ -27,27 +27,45 @@ main {
 }
 
 .figure1, .figure2 {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+figcaption {
+  border: 1px solid black;
+  background-color: white;
+  height: 20%;
 }
 
 .image-one, .image-two {
+  align-self: center;
   display: block;
-  overflow: hidden;
   height: 80%;
-  width: auto;
 }
 
 .upload-button {
   font-size: 2em;
 }
 
+#result {
+  font-size: 3em;
+}
+
+h2 {
+  text-align: center;
+}
+
 aside {
-  flex: 1 0 30%;
+  flex: 1 0 20%;
   display: flex;
   flex-flow: column nowrap;
   padding: 2em;
+  border-top: 2px solid black;
   border-left: 3px dotted black;
   border-right: 2px solid black;
-  border-bottom: 2px dotted black;
+  border-bottom: 3px dotted black;
 }
