@@ -1,23 +1,8 @@
 #!/usr/bin/python2
 #
 # A modified version of:
-# Example to compare the faces in two images.
-# Brandon Amos
-# 2015/09/29
-#
-# Copyright 2015-2016 Carnegie Mellon University
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# http://cmusatyalab.github.io/openface/demo-2-comparison/
+
 import sys
 import argparse
 import cv2
@@ -35,10 +20,6 @@ dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
 parser = argparse.ArgumentParser()
-
-parser.add_argument('imgs', type=str, nargs='+', help="Input images.")
-args = parser.parse_args()
-
 align = openface.AlignDlib(os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 img_dim = 96
 net = openface.TorchNeuralNet(os.path.join(openfaceModelDir, 'nn4.small2.v1.t7'), img_dim)
@@ -59,13 +40,20 @@ def getRep(imgPath):
     rep = net.forward(alignedFace)
     return rep
 
+def main():
+    result = 0
+    img1 = 'test/file-0'
+    img2 = 'test/file-1'
+    d = getRep(img1) - getRep(img2)
+    diff = np.dot(d, d)
+    percent = ((4.0 - diff)/4.0) * 100
+    result = percent
+    return result
+    # TODO:!!!!!! set up byte stream? how to write to stdout faster?!
+    # print("Comparing {} with {}.".format(img1, img2))
+    # print(
+    #     "  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))
+
 if __name__ == "__main__":
-    for (img1, img2) in itertools.combinations(args.imgs, 2):
-        d = getRep(img1) - getRep(img2)
-        diff = np.dot(d, d)
-        percent = ((4.0 - diff)/4.0) * 100
-        sys.stdout.write(str(percent) + '\n')
-        # TODO:!!!!!! set up byte stream? how to write to stdout faster?!
-        # print("Comparing {} with {}.".format(img1, img2))
-        # print(
-        #     "  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))
+    res = main()
+    print res

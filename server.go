@@ -43,34 +43,24 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("files saved.")
 	fmt.Println("Processing images...")
-	processFaces()
-	// fmt.Println(output)
-	// if e != nil {
-	// 	fmt.Println("error!")
-	// 	fmt.Println(e)
-	// } else {
-	// 	fmt.Println("image processing complete")
-	// 	fmt.Println(output)
-	// }
+	res, err := processFaces(r)
+	if err != nil {
+		fmt.Println("ERROR")
+	}
+	fmt.Println("Succesfully Processed Image!")
+	fmt.Println("writing data to response...")
+	fmt.Fprintf(w, "%s", res)
+	fmt.Println("Response sent.")
 }
 
-func processFaces() {
-	cmd := exec.Command("./compare.py", "test/*")
-	stdout, err := cmd.StdoutPipe()
+func processFaces(r *http.Request) (string, error) {
+	var e error
+	cmd := exec.CommandContext(r.Context(), "./compare.py")
+	out, err := cmd.Output()
 	if err != nil {
-		panic(err)
+		e = err
 	}
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		panic(err)
-	}
-	err = cmd.Start()
-	if err != nil {
-		panic(err)
-	}
-	go copyOutput(stdout)
-	go copyOutput(stderr)
-	cmd.Wait()
+	return string(out), e
 }
 
 func copyOutput(r io.Reader) {

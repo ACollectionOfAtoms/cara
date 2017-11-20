@@ -46,6 +46,8 @@ function uploadFiles() {
   const uri = '/upload';
   const formData = new FormData();
   const files = Object.values(uploadedFiles);
+  const resultDiv = document.querySelector('#result');
+
   console.log(files);
   files.forEach((file, index)=> {
     formData.append(`file-${index}`, file);
@@ -54,8 +56,11 @@ function uploadFiles() {
     method: 'POST',
     'Content-Type': 'multipart/form-data',
     body: formData
-  }).then(res => {
-    console.log(res);
+  })
+  .then(r => r.text())
+  .then(data => {
+    const res = parseInt(data)
+    resultDiv.textContent = data;
   }).catch(e => {
     console.log('Error', e);
   })
