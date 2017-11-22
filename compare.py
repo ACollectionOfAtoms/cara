@@ -19,13 +19,12 @@ modelDir = os.path.join(fileDir, '../openface', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
-parser = argparse.ArgumentParser()
 align = openface.AlignDlib(os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 img_dim = 96
 net = openface.TorchNeuralNet(os.path.join(openfaceModelDir, 'nn4.small2.v1.t7'), img_dim)
 
-def getRep(imgPath):
-    bgrImg = cv2.imread(imgPath)
+def get_rep(b64_string):
+    bgrImg = data_uri_to_cv2_img(b64_string)
     if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
     rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
@@ -40,16 +39,26 @@ def getRep(imgPath):
     rep = net.forward(alignedFace)
     return rep
 
+def data_uri_to_cv2_img(b64_string):
+    nparr = np.fromstring(b64_string.decode('base64'), np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    return img
+
+def ensure_padding(b64_string):
+    value = b64_string
+    if len(value) % 4:
+        # not a multiple of 4, add padding:
+        value += '=' * (4 - len(value) % 4) 
+    return value
+
 def main():
-    result = 0
-    # TODO: Read files from streams not disc lmao
-    img1 = 'test/file-0'
-    img2 = 'test/file-1'
-    d = getRep(img1) - getRep(img2)
+    img1 = raw_input('reading image one from stdin!')
+    img2 =  raw_input('reading image two from stdin!')
+    img1 = ensure_padding(img1)
+    img2 = ensure_padding(img2)
+    d = get_rep(img1) - get_rep(img2)
     diff = np.dot(d, d)
-    percent = ((4.0 - diff)/4.0) * 100
-    result = percent
-    return result
+    return ((4.0 - diff)/4.0) * 100
 
 if __name__ == "__main__":
     res = main()
