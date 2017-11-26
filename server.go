@@ -16,11 +16,11 @@ import (
 func base64Image(fileName string, r *http.Request) string {
 	file, _, err := r.FormFile(fileName)
 	if err != nil {
-		panic("Failed to read file!")
+		panic("Failed to open file!")
 	}
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		panic("Failed to read file!")
+		panic("Failed to read bytes of file!")
 	}
 	b64String := base64.RawStdEncoding.EncodeToString(fileBytes)
 	defer file.Close()
@@ -39,6 +39,9 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Saving %v files...\n", len(files))
 
 	imageStrings := make([]string, 0, 2)
+	if len(imageStrings) > 2 {
+		panic("We cannot compare more than two images! Aborting...")
+	}
 	fmt.Println("Converting Image to base64 string")
 	for fileName := range files {
 		b64String := base64Image(fileName, r)
@@ -104,6 +107,7 @@ func stringFromIOReader(r io.Reader) string {
 }
 
 func main() {
+	fmt.Println("Listening on 7777.")
 	http.Handle("/", http.FileServer(http.Dir(".")))
 	http.HandleFunc("/upload", upload)
 	log.Fatal(http.ListenAndServe(":7777", nil))
