@@ -31,23 +31,23 @@ func base64Image(fileName string, r *http.Request) string {
 
 func upload(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		fmt.Println("POST was not used, implement error here!")
-	} else {
-		fmt.Println("Receiving Files...")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
 	}
+	fmt.Println("Receiving Files...")
 	r.ParseMultipartForm(32 << 20)
 	files := r.MultipartForm.File
 
 	fmt.Printf("Saving %v files...\n", len(files))
 
 	imageStrings := make([]string, 0, 2)
-	if len(imageStrings) > 2 {
-		panic("We cannot compare more than two images! Aborting...")
-	}
 	fmt.Println("Converting Image to base64 string")
 	for fileName := range files {
 		b64String := base64Image(fileName, r)
 		imageStrings = append(imageStrings, b64String)
+		if len(imageStrings) > 2 {
+			panic("We cannot compare more than two images! Aborting...")
+		}
 	}
 	fmt.Println("files converted to base64 strings.")
 
