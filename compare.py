@@ -14,10 +14,10 @@ np.set_printoptions(precision=2)
 
 import openface
 
-fileDir = os.path.dirname(os.path.realpath(__file__))
-modelDir = os.path.join(fileDir, '../openface', 'models')
-dlibModelDir = os.path.join(modelDir, 'dlib')
-openfaceModelDir = os.path.join(modelDir, 'openface')
+open_face_dir = os.path.dirname(os.environ['OPENFACE_PATH'])
+model_dir = os.path.join(open_face_dir, 'models')
+dlibModelDir = os.path.join(model_dir, 'dlib')
+openfaceModelDir = os.path.join(model_dir, 'openface')
 
 # TODO: This lib and model do not need to be loaded each time the script runs...
 align = openface.AlignDlib(os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
