@@ -11,6 +11,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/rs/cors"
 )
 
 func base64Image(fileName string, r *http.Request) string {
@@ -108,7 +110,11 @@ func stringFromIOReader(r io.Reader) string {
 
 func main() {
 	fmt.Println("Listening on 7777.")
-	http.Handle("/", http.FileServer(http.Dir(".")))
-	http.HandleFunc("/upload", upload)
-	log.Fatal(http.ListenAndServe(":7777", nil))
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:5555"},
+	})
+	mux := http.NewServeMux()
+	mux.HandleFunc("/upload", upload)
+	handler := c.Handler(mux)
+	log.Fatal(http.ListenAndServe(":7777", handler))
 }
