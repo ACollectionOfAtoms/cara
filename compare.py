@@ -33,19 +33,31 @@ class NoFaceError(Exception):
 class CouldNotAlignFacesError(Exception):
     pass
 
+def rotate_image(cv2_image, deg):
+    rows, cols, _ = cv2_image.shape
+    M = cv2.getRotationMatrix2D((cols/2, rows/2), deg, 1)
+    return cv2.warpAffine(cv2_image, M, (cols, rows))
+
 def get_rep(b64_string):
     bgrImg = b64_to_cv2_img(b64_string)
     if bgrImg is None:
         raise ImageLoadError 
-    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
 
+    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
     bb = align.getLargestFaceBoundingBox(rgbImg)
+    rotations = 0
+    while bb is None and rotations <= 4:
+        rgbImg = rotate_image(rgbImg, 90)
+        bb = align.getLargestFaceBoundingBox(rgbImg)
+        rotations += 1
     if bb is None:
-        raise NoFaceError 
+        raise NoFaceError
+
     alignedFace = align.align(img_dim, rgbImg, bb,
                               landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
         raise CouldNotAlignFacesError 
+
     rep = net.forward(alignedFace)
     return rep
 
