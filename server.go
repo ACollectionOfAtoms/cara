@@ -111,7 +111,10 @@ func stringFromIOReader(r io.Reader) string {
 func main() {
 	fmt.Println("Listening on 7777.")
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5555"},
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+			"http://www.aretheyalike.com",
+		},
 	})
 	mux := http.NewServeMux()
 	mux.HandleFunc("/upload", upload)
