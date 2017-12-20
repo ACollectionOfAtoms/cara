@@ -73,7 +73,7 @@ def main():
     except ImageLoadError:
         return 9001
     except (NoFaceError, CouldNotAlignFacesError):
-        return 9001
+        return 9002
     except:
         return 9003
     return ((4.0 - diff)/4.0) * 100

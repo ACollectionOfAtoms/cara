@@ -49,7 +49,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 			panic("We cannot compare more than two images! Aborting...")
 		}
 	}
-	fmt.Println("files converted to base64 strings.")
+	fmt.Println("Files converted to base64 strings.")
 
 	fmt.Println("Processing images...")
 	res, err := processFaces(r, imageStrings[0], imageStrings[1])
