@@ -8,11 +8,19 @@ import argparse
 import cv2
 import itertools
 import os
+import logging
 
 import numpy as np
 np.set_printoptions(precision=2)
 
 import openface
+
+logger = logging.getLogger('cara-comparer')
+hdlr = logging.FileHandler('cara-comparer.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr)
+logger.setLevel(logging.INFO)
 
 open_face_dir = os.path.dirname(os.environ['OPENFACE_PATH'])
 model_dir = os.path.join(open_face_dir, 'models')
@@ -41,16 +49,19 @@ def rotate_image(cv2_image, deg):
 def get_rep(b64_string):
     bgrImg = b64_to_cv2_img(b64_string)
     if bgrImg is None:
+        logger.warn('Unable to load image')
         raise ImageLoadError 
 
     rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
     bb = align.getLargestFaceBoundingBox(rgbImg)
     rotations = 0
     while bb is None and rotations <= 4:
+        logger.info('Attempting rotation {}'.format(rotations))
         rgbImg = rotate_image(rgbImg, 90)
         bb = align.getLargestFaceBoundingBox(rgbImg)
         rotations += 1
     if bb is None:
+        logger.warn('Did not find a face!')
         raise NoFaceError
 
     alignedFace = align.align(img_dim, rgbImg, bb,
@@ -62,11 +73,13 @@ def get_rep(b64_string):
     return rep
 
 def b64_to_cv2_img(b64_string):
+    logger.info('Converting b64 image to cv2 image')
     nparr = np.fromstring(b64_string.decode('base64'), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     return img
 
 def ensure_padding(b64_string):
+    logger.info('Adding padding to image')
     value = b64_string
     if len(value) % 4:
         # not a multiple of 4, add padding:
@@ -74,6 +87,7 @@ def ensure_padding(b64_string):
     return value
 
 def main():
+    logger.info('compare app initialized')
     img1 = raw_input('reading image one from stdin!')
     img2 =  raw_input('reading image two from stdin!')
     img1 = ensure_padding(img1)
